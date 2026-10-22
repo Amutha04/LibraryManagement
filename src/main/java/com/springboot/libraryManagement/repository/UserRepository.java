@@ -14,4 +14,5 @@ from User u
 where u.username = ?1 AND u.isActive = ?2
 """)
     User loadUserByUsername(String username, boolean isActive);
+
 }

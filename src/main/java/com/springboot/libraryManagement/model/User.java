@@ -23,20 +23,20 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false, unique = true)
     private String username;
+
     @Column(nullable = false)
     private String password;
+
     @Enumerated(EnumType.STRING)
     private Role role;
-    private boolean isActive;
+
+    private boolean isActive = true;
+
     @CreationTimestamp
     private Instant createdAt;
-
-    @PrePersist
-    public void init() {
-        isActive = true;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
