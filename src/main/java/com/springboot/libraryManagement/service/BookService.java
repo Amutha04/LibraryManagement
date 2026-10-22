@@ -47,6 +47,12 @@ public class BookService {
     }
 
     public BookRespDto getByIsbn(String isbn) {
+        // 1. check the book exists
+        Book book = bookRepository.getBook(isbn);
+        if(book == null)
+            throw new ResourceNotFoundException("Book not found");
+
+        // 2. return the bookRespDto
         return bookRepository.getByIsbn(isbn);
     }
 
