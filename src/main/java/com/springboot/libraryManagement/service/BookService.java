@@ -16,10 +16,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BookService {
 
+    private final UserRepository userRepository;
     private final BookRepository bookRepository;
 
-    public void add(@Valid BookDto bookDto) {
+    public void add(@Valid BookDto bookDto, String loggedUsername) {
         // 1. check the role
+        User user = userRepository.loadUserByUsername(loggedUsername, true);
+        if(!user.getRole().equals(Role.ADMIN))
+            throw new OwnershipException("Operation not allowed");
 
         // 2. convert dto into book
         Book book = BookMapper.convertDtoToBook(bookDto);

@@ -17,8 +17,9 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping("/api/book/add")
-    public void add(@Valid@RequestBody BookDto bookDto) {
-        bookService.add(bookDto);
+    public void add(@Valid@RequestBody BookDto bookDto,
+                    Principal principal) {
+        bookService.add(bookDto, principal.getName());
     }
 
 }
