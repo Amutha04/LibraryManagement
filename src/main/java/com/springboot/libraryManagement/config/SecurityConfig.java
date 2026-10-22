@@ -30,6 +30,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST,"/api/admin/add").denyAll()
                         .requestMatchers(HttpMethod.POST,"/api/book/add").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/book/delete").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/book/update").hasAuthority("ADMIN")
                         .anyRequest().permitAll()
                 );
 

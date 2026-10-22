@@ -24,4 +24,11 @@ from Book b
 where b.isbn = ?1
 """)
     BookRespDto getByIsbn(String isbn);
+
+    @Query("""
+select b
+from Book b
+where b.isbn = ?1
+""")
+    Book getBook(String isbn);
 }

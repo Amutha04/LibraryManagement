@@ -4,6 +4,7 @@ import com.springboot.libraryManagement.dto.request.BookDto;
 import com.springboot.libraryManagement.dto.response.BookRespDto;
 import com.springboot.libraryManagement.enums.Role;
 import com.springboot.libraryManagement.exception.OwnershipException;
+import com.springboot.libraryManagement.exception.ResourceNotFoundException;
 import com.springboot.libraryManagement.mapper.BookMapper;
 import com.springboot.libraryManagement.model.Book;
 import com.springboot.libraryManagement.model.User;
@@ -47,5 +48,36 @@ public class BookService {
 
     public BookRespDto getByIsbn(String isbn) {
         return bookRepository.getByIsbn(isbn);
+    }
+
+    public void delete(String isbn, String loggedUsername) {
+        // 1. check the role
+        User user = userRepository.loadUserByUsername(loggedUsername, true);
+        if(!user.getRole().equals(Role.ADMIN))
+            throw new OwnershipException("Operation not allowed");
+
+        // 2. check the book exists
+        Book book = bookRepository.getBook(isbn);
+        if(book == null)
+            throw new ResourceNotFoundException("Book not found");
+
+        // 3. delete the book
+        bookRepository.delete(book);
+    }
+
+    public void update(String isbn, Integer newAvailable, String loggedUsername) {
+        // 1. check the role
+        User user = userRepository.loadUserByUsername(loggedUsername, true);
+        if(!user.getRole().equals(Role.ADMIN))
+            throw new OwnershipException("Operation not allowed");
+
+        // 2. check the book exists
+        Book book = bookRepository.getBook(isbn);
+        if(book == null)
+            throw new ResourceNotFoundException("Book not found");
+
+        // 3. update and save
+        book.setAvailableCopies(newAvailable);
+        bookRepository.save(book);
     }
 }

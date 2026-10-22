@@ -2,6 +2,7 @@ package com.springboot.libraryManagement.config;
 
 import com.springboot.libraryManagement.dto.response.ErrorDto;
 import com.springboot.libraryManagement.exception.OwnershipException;
+import com.springboot.libraryManagement.exception.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -26,6 +27,19 @@ public class GlobalExceptionHandler {
                 .body(new ErrorDto(
                         e.getMessage(),
                         "Logged-in User cannot perform this operation",
+                        Instant.now()
+                ));
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleResourceNotFoundException(
+            ResourceNotFoundException e
+    ) {
+        return ResponseEntity
+                .badRequest()
+                .body(new ErrorDto(
+                        e.getMessage(),
+                        "Resource is not available",
                         Instant.now()
                 ));
     }

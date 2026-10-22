@@ -3,6 +3,7 @@ package com.springboot.libraryManagement.controller;
 import com.springboot.libraryManagement.dto.request.BookDto;
 import com.springboot.libraryManagement.dto.response.BookRespDto;
 import com.springboot.libraryManagement.service.BookService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -34,4 +35,16 @@ public class BookController {
         return bookService.getByIsbn(isbn);
     }
 
+    @DeleteMapping("/api/book/delete")
+    public void delete(@RequestParam(name = "isbn") String isbn,
+                       Principal principal) {
+        bookService.delete(isbn, principal.getName());
+    }
+
+    @PutMapping("/api/book/update")
+    public void update(@RequestParam(name = "isbn") String isbn,
+                       @RequestParam(name = "newAvailable") Integer newAvailable,
+                       Principal principal) {
+        bookService.update(isbn, newAvailable, principal.getName());
+    }
 }
